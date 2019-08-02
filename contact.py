@@ -13,3 +13,33 @@ class Work:
         self.company = company
         self.address = address
         self.home = home
+
+
+class Secondary:
+    def __init__(self, address2, phone2, notes):
+        self.address2 = address2
+        self.phone2 = phone2
+        self.notes = notes
+
+
+class Birthday:
+    def __init__(self, bday, bmonth, byear):
+        self.bday = bday
+        self.bmonth = bmonth
+        self.byear = byear
+
+
+class Internet_contact:
+    def __init__(self, email, email2, email3, homepage):
+        self.email = email
+        self.email2 = email2
+        self.email3 = email3
+        self.homepage = homepage
+
+
+class Telephone:
+    def __init__(self, mobile, work, fax):
+        self.mobile = mobile
+        self.work = work
+        self.fax = fax
+
