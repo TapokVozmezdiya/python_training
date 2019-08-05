@@ -1,12 +1,6 @@
 
 
 class Contact:
-    # fields = ['a', 'b']
-    #
-    # def __init__(self, **kwargs):
-    #     for key, value in kwargs.items():
-    #         assert key in self.fields, str(key)
-    #         setattr(self, key, value)
 
     def __init__(self, firstname, middlename, lastname, nickname, title, company, address, home, address2, phone2,
                  notes, bday, bmonth, byear, email, email2, email3, homepage, mobile, work, fax):
