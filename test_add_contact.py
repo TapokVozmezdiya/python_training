@@ -14,44 +14,41 @@ class ContactTestCase(unittest.TestCase):
         self.wd.implicitly_wait(30)
 
     def test_add_contact(self):
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd, username="admin", password="secret")
-        self.add_contact(wd)
-        self.add_string(wd, Contact(firstname="Василий", lastname="Петрович", middlename="Шапошников",
-                                              nickname="Shapka", address="dfgdfgsfafg", company="ghkdflghd",
+
+        self.login(username="admin", password="secret")
+        self.add_string(Contact(firstname="Василий", lastname="Петрович", middlename="Шапошников",
+                            nickname="Shapka", address="dfgdfgsfafg", company="ghkdflghd",
                                               home="dlkfghlsd", title="dfngdgnf", mobile="23", work="45", fax="67",
                                               email="werw", email2="wer", email3="dsfsd", homepage="sdfsdf",
                                               bday="4", bmonth="May", byear="1990", address2="sdfsdfasdfasdf",
                                               phone2="werawdfadf", notes="asdfasdfasdfasdf"))
-        self.confirm(wd)
-        self.return_to_groups_page(wd)
-        self.Logout(wd)
+
+        self.logout()
 
     def test_add_empty_contact(self):
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd, username="admin", password="secret")
-        self.add_contact(wd)
-        self.add_string(wd, Contact(firstname="", lastname="", middlename="",
+        self.login(username="admin", password="secret")
+        self.add_string(Contact(firstname="", lastname="", middlename="",
                                               nickname="", address="", company="",
                                               home="", title="", mobile="", work="", fax="",
-                                              email="", email2="", email3="", homepage="",
-                                    bday="-", bmonth="-", byear="", address2="", phone2="", notes=""))
-        self.confirm(wd)
-        self.return_to_groups_page(wd)
-        self.Logout(wd)
+                                              email="", email2="", email3="", homepage="", bday="-", bmonth="-",
+                                              byear="", address2="", phone2="", notes=""))
+        self.logout()
 
-    def Logout(self, wd):
+    def logout(self):
+        wd = self.wd
         wd.find_element_by_link_text("Logout").click()
 
-    def return_to_groups_page(self, wd):
+    def return_to_groups_page(self):
+        wd = self.wd
         wd.find_element_by_link_text("home page").click()
 
-    def confirm(self, wd):
+    def confirm(self):
+        wd = self.wd
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
 
-    def add_string(self, wd, contact):
+    def add_string(self, contact):
+        wd = self.wd
+        self.add_contact()
         # FIO & Nickname
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
@@ -123,11 +120,16 @@ class ContactTestCase(unittest.TestCase):
         wd.find_element_by_name("home").click()
         wd.find_element_by_name("home").clear()
         wd.find_element_by_name("home").send_keys(contact.home)
+        self.confirm()
+        self.return_to_groups_page()
 
-    def add_contact(self, wd):
+    def add_contact(self):
+        wd = self.wd
         wd.find_element_by_link_text("add new").click()
 
-    def login(self, wd, username, password):
+    def login(self, username, password):
+        wd = self.wd
+        self.open_home_page()
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
@@ -136,7 +138,8 @@ class ContactTestCase(unittest.TestCase):
         wd.find_element_by_name("pass").send_keys(password)
         wd.find_element_by_xpath("//input[@value='Login']").click()
 
-    def open_home_page(self, wd):
+    def open_home_page(self):
+        wd = self.wd
         wd.get("http://localhost/addressbook/")
 
     def is_element_present(self, how, what):
