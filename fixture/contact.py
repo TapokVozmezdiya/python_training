@@ -12,7 +12,6 @@ class ContactHelper:
 
     def add_string(self, contact):
         wd = self.app.wd
-        self.add_contact()
         # FIO & Nickname
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
@@ -84,12 +83,27 @@ class ContactHelper:
         wd.find_element_by_name("home").click()
         wd.find_element_by_name("home").clear()
         wd.find_element_by_name("home").send_keys(contact.home)
-        self.confirm()
+
+    def edit_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_xpath("//img[@alt='Edit']").click()
+
+    def update_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_name("update").click()
         self.return_to_home_page()
+
+    def delete_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to_alert().accept()
 
     def confirm(self):
         wd = self.app.wd
-        wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+        wd.find_element_by_xpath("(//input[@type='submit'])[2]").click()
+        self.return_to_home_page()
 
     def return_to_home_page(self):
         wd = self.app.wd
