@@ -6,7 +6,6 @@ class ContactHelper:
 
     def __init__(self, app):
         self.app = app
-        self.id = id
 
     def add_contact(self):
         wd = self.app.wd
@@ -96,7 +95,7 @@ class ContactHelper:
         for element in wd.find_elements_by_css_selector("tr.odd"):
             text = element.text
             id = element.find_element_by_name("selected[]").get_attribute("value")
-            contacts.append(Contact(firstname=text, id=id))
+            contacts.append(Contact(firstname=text, id=id, middlename=text))
         return contacts
 
 
