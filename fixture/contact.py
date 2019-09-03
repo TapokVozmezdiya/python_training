@@ -101,6 +101,6 @@ class ContactHelper:
                 firstname = element.find_element_by_css_selector('[name] td:nth-of-type(3)').text
                 lastname = element.find_element_by_css_selector('[name] td:nth-of-type(2)').text
                 self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id))
-        return self.contact_cache
+        return list(self.contact_cache)
 
 
