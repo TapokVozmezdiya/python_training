@@ -2,6 +2,7 @@ from model.contact import Contact
 
 
 def test_mdf_contact(app):
+    old_contacts = app.contact.get_contact_list()
     if app.contact.count() == 0:
         app.contact.add_contact()
         app.contact.fill_contact_form(Contact(
@@ -10,9 +11,15 @@ def test_mdf_contact(app):
             email2="wer", email3="dsfsd", homepage="sdfsdf", bday="4", bmonth="May", byear="1990",
             address2="sdfsdfasdfasdf", phone2="werawdfadf", notes="asdfasdfasdfasdf"))
         app.contact.confirm()
-    app.contact.edit_contact(Contact(firstname="Edit", lastname="Edit", middlename="Edit", nickname="Edit",
-                                     address="Edit", company="Edit", home="Edit", title="Edit", mobile="Edit",
-                                     work="Edit", fax="Edit", email="Edit", email2="Edit", email3="Edit",
-                                     homepage="Edit", bday="-", bmonth="-", byear="Edit", address2="Edit",
-                                     phone2="Edit", notes="Edit"))
+    contact = Contact(firstname="Edit", lastname="Edit", middlename="Edit", nickname="Edit",
+                      address="Edit", company="Edit", home="Edit", title="Edit", mobile="Edit",
+                      work="Edit", fax="Edit", email="Edit", email2="Edit", email3="Edit",
+                      homepage="Edit", bday="-", bmonth="-", byear="Edit", address2="Edit",
+                      phone2="Edit", notes="Edit")
+    contact.id = old_contacts[0].id
+    app.contact.edit_contact(contact)
     app.contact.update_contact()
+    new_contacts = app.contact.get_contact_list()
+    assert len(old_contacts) == len(new_contacts)
+    old_contacts[0] = contact
+    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
