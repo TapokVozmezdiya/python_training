@@ -77,6 +77,7 @@ class ContactHelper:
         wd = self.app.wd
         wd.find_element_by_xpath("(//input[@type='submit'])[2]").click()
         self.return_to_home_page()
+        self.contact_cache = None
 
     def return_to_home_page(self):
         wd = self.app.wd
@@ -88,15 +89,18 @@ class ContactHelper:
         self.return_to_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.return_to_home_page()
-        contacts = []
-        for element in wd.find_elements_by_name("entry"):
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            firstname = element.find_element_by_css_selector('[name] td:nth-of-type(3)').text
-            lastname = element.find_element_by_css_selector('[name] td:nth-of-type(2)').text
-            contacts.append(Contact(lastname=lastname, firstname=firstname, id=id))
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.return_to_home_page()
+            self.contact_cache = []
+            for element in wd.find_elements_by_name("entry"):
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                firstname = element.find_element_by_css_selector('[name] td:nth-of-type(3)').text
+                lastname = element.find_element_by_css_selector('[name] td:nth-of-type(2)').text
+                self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id))
+        return self.contact_cache
 
 
