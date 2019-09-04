@@ -44,18 +44,18 @@ class GroupHelper:
         if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
             wd.find_element_by_link_text("groups").click()
 
-    def edit_group(self, new_group_data):
+    def edit_group(self, index, new_group_data):
         wd = self.app.wd
         self.open_group_page()
-        self.select_first_group(wd)
+        self.select_group_by_index(index)
         wd.find_element_by_name("edit").click()
         self.fill_group_form(new_group_data)
         wd.find_element_by_name("update").click()
         self.return_to_groups_page()
         self.group_cache = None
 
-    def select_first_group(self, wd):
-        wd.find_element_by_name("selected[]").click()
+    def select_first_group(self):
+        self.select_group_by_index(0)
 
     def select_group_by_index(self, index):
         wd = self.app.wd

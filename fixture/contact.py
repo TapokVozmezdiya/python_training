@@ -12,6 +12,10 @@ class ContactHelper:
         if not (wd.current_url.endswith("/edit.php") and len(wd.find_elements_by_name("photo")) > 0):
             wd.find_element_by_link_text("add new").click()
 
+    def select_contact_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
+
     def fill_contact_form(self, contact):
         wd = self.app.wd
         # FIO & Nickname
@@ -71,6 +75,14 @@ class ContactHelper:
         wd = self.app.wd
         self.return_to_home_page()
         wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to_alert().accept()
+        self.contact_cache = None
+
+    def delete_contact_by_index(self, index):
+        wd = self.app.wd
+        self.return_to_home_page()
+        self.select_contact_by_index(index)
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
         self.contact_cache = None
