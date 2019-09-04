@@ -12,12 +12,18 @@ class ContactHelper:
         if not (wd.current_url.endswith("/edit.php") and len(wd.find_elements_by_name("photo")) > 0):
             wd.find_element_by_link_text("add new").click()
 
+    def select_first_contact(self):
+        self.select_contact_by_index(0)
+
     def select_contact_by_index(self, index):
         wd = self.app.wd
         wd.find_elements_by_name("selected[]")[index].click()
 
-    def fill_contact_form(self, contact):
+    def select_edit_contact_by_index(self, index):
         wd = self.app.wd
+        wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
+
+    def fill_contact_form(self, contact):
         # FIO & Nickname
         self.change_field_value("firstname", contact.firstname)
         self.change_field_value("middlename", contact.middlename)
@@ -58,11 +64,9 @@ class ContactHelper:
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(text)
 
-    def edit_contact(self, new_contact_data):
-        wd = self.app.wd
+    def edit_contact(self, index, new_contact_data):
         self.return_to_home_page()
-        wd.find_element_by_name("selected[]").click()
-        wd.find_element_by_xpath("//img[@alt='Edit']").click()
+        self.select_edit_contact_by_index(index)
         self.fill_contact_form(new_contact_data)
 
     def update_contact(self):
