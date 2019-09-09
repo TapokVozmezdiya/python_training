@@ -23,6 +23,10 @@ class ContactHelper:
         wd = self.app.wd
         wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
 
+    def open_contact_to_edit_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
+
     def fill_contact_form(self, contact):
         # FIO & Nickname
         self.change_field_value("firstname", contact.firstname)
@@ -41,10 +45,10 @@ class ContactHelper:
         self.change_field_value("email", contact.email)
         self.change_field_value("email2", contact.email2)
         self.change_field_value("email3", contact.email3)
-        self.change_field_value("homepage", contact.homepage)
         # Telephone
+        self.change_field_value("homephone", contact.homephone)
         self.change_field_value("mobile", contact.mobile)
-        self.change_field_value("work", contact.work)
+        self.change_field_value("workphone", contact.workphone)
         self.change_field_value("fax", contact.fax)
         # Work
         self.change_field_value("title", contact.title)
@@ -118,7 +122,22 @@ class ContactHelper:
                 id = element.find_element_by_name("selected[]").get_attribute("value")
                 firstname = element.find_element_by_css_selector('[name] td:nth-of-type(3)').text
                 lastname = element.find_element_by_css_selector('[name] td:nth-of-type(2)').text
-                self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id))
+                all_phones = element.find_element_by_css_selector('[name] td:nth-of-type(6)').text.splitlines()
+                self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id,
+                                                  homephone=all_phones[0], mobile=all_phones[1],
+                                                  workphone=all_phones[2], phone2=all_phones[3]))
         return list(self.contact_cache)
 
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        firstname = wd.find_element_by_name("firstname").get_attribute("value")
+        lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        homephone = wd.find_element_by_name("home").get_attribute("value")
+        workphone = wd.find_element_by_name("work").get_attribute("value")
+        mobile = wd.find_element_by_name("mobile").get_attribute("value")
+        phone2 = wd.find_element_by_name("phone2").get_attribute("value")
+        return Contact(firstname=firstname, lastname=lastname, id=id, homephone=homephone, mobile=mobile,
+                       workphone=workphone, phone2=phone2)
 
